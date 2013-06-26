@@ -1,0 +1,322 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Document sans nom</title>
+<style>
+table.matrix {
+    border: 0 none;
+    border-spacing: 0;
+    margin: 25px 0;
+    width: 100%;
+}
+table.matrix th, table.matrix td {
+    padding: 14px;
+    text-align: center;
+}
+table.matrix th {
+    background-color: #242424;
+	background-color:#DC2823;
+    border-bottom: 1px solid #353535;
+    color: #99FF00;
+	color:#fff;
+    font-size: 15px;
+    font-weight: normal;
+    padding: 12px 0 10px;
+    text-align: center;
+    vertical-align: middle;
+}
+table.matrix td {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: -moz-use-text-color -moz-use-text-color #DDD;
+    border-image: none;
+    border-style: none none solid;
+    border-width: 0 0 1px;
+    line-height: 135%;
+}
+table.matrix td.price {
+    color: #99FF00;
+    font-size: 120%;
+}
+table.matrix td.price span {
+    color: #CCCCCC;
+    font-size: 10px;
+    padding-left: 1px;
+}
+table.matrix td.cpu {
+    font-size: 9px;
+}
+table.matrix td.cpu {
+    font-size: 10px;
+}
+table.matrix td.heading {
+    color: #000;
+    padding-left: 12px;
+    text-align: right;
+	font-weight:bold;
+    width: 350px;
+}
+table.matrix td.heading strong {
+    font-size: 12px;
+    font-weight: normal;
+}
+table.matrix tr.bot td {
+    background-color: #242424;
+    background-image: none;
+    border-bottom: 0 none;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+span.tip {
+    background-color: #333333;
+    border: 1px solid #555555;
+    color: #CCCCCC;
+    cursor: pointer;
+    font-size: 10px;
+    margin-left: 5px;
+    padding: 1px 4px;
+    text-decoration: none;
+}
+span.tip:hover {
+    color: #FFFFFF;
+}
+div.tooltip, .service-tooltip-classic {
+	display:none;
+    background: none repeat scroll 0 0 #000000;
+    border: 1px solid #555555;
+    color: #FFFFFF;
+    font-size: 11px;
+    left: -10px;
+    line-height: 135%;
+    padding: 12px 20px;
+    text-align: left;
+    top: 20px;
+    width: 200px;
+    z-index: 100;
+}
+</style>
+
+</head>
+
+<body>
+<table cellspacing="0" cellpadding="0" class="matrix">
+  <col span="1" />
+  <col  span="4" />
+  <tr  class="top">
+    <td  class="heading">&nbsp;</td>
+    <td >Waliceo Santé 1</td>
+    <td >Waliceo Santé 2</td>
+    <td >Waliceo Santé 3</td>
+    <td >Waliceo Santé 4</td>
+  </tr>
+
+  <tr>
+    <th>HOSPITALISATION</th>
+    <th>300%</th>
+    <th>300%</th>
+    <th>300%</th>
+    <th>300%</th>
+  </tr>
+  <tr>
+    <td class="heading">Frais de séjour<span class="tip" >?</span><span class="service-tooltip-classic"> les    frais de séjour comprennent les honoraires des actes de chirurgie,    d'anesthésie et d'obstétrique et autres actes pratiqués en hospitalisation</span></td>
+    <td>300%</td>
+    <td>300%</td>
+    <td>300%</td>
+    <td>300%</td>
+  </tr>
+  <tr>
+    <td class="heading">Forfaits et    franchises <span class="tip" >?</span><span class="service-tooltip-classic">forfait    journalier hospitalier et forfait 18€</span></td>
+    <td>100%</td>
+    <td>100%</td>
+    <td>100%</td>
+    <td>100%</td>
+  </tr>
+  <tr>
+    <td class="heading">Chambre particulière ambulatoire <span class="tip" >?</span><span class="service-tooltip-classic">hospitalisation    de jour</span></td>
+    <td>15 € / jour </td>
+    <td>15 € / jour </td>
+    <td>15 € / jour </td>
+    <td>15 € / jour </td>
+  </tr>
+  <tr>
+    <td class="heading">Chambre particulière hors ambulatoire <span class="tip" >?</span><span class="service-tooltip-classic">hospitalisation    de plus d'un jour</span></td>
+    <td>60 € / jour</td>
+    <td>60 € / jour</td>
+    <td>60 € / jour</td>
+    <td>60 € / jour</td>
+  </tr>
+  <tr>
+    <td class="heading">Frais    d'accompagnant</td>
+    <td>30 € / jour</td>
+    <td>30 € / jour</td>
+    <td>30 € / jour</td>
+    <td>30 € / jour</td>
+  </tr>
+  <tr>
+    <th>SOINS COURANTS</th>
+    <th>–</th>
+    <th>100%</th>
+    <th>150%</th>
+    <th>200%</th>
+  </tr>
+  <tr>
+    <td class="heading">Consultations médecins <span class="tip" >?</span><span class="service-tooltip-classic">médecins    généralistes et spécialistes</span></td>
+    <td>–</td>
+    <td>100%</td>
+    <td>150%</td>
+    <td>200%</td>
+  </tr>
+  <tr>
+    <td class="heading">Actes médicaux <span class="tip" >?</span><span class="service-tooltip-classic">actes    techniques, chirurgicaux et anesthésiques réalisés au cabinet du médecin</span></td>
+    <td>–</td>
+    <td>100%</td>
+    <td>150%</td>
+    <td>200%</td>
+  </tr>
+  <tr>
+    <td class="heading">Biologie et    imagerie médicale <span class="tip" >?</span><span class="service-tooltip-classic">radiologie, analyses    de laboratoire</span></td>
+    <td>–</td>
+    <td>100%</td>
+    <td>150%</td>
+    <td>200%</td>
+  </tr>
+  <tr>
+    <td class="heading">Médicaments    vignette blanches</td>
+    <td>–</td>
+    <td>100%</td>
+    <td>100%</td>
+    <td>100%</td>
+  </tr>
+  <tr>
+    <td class="heading">Médicaments    vignettes  bleues </td>
+    <td>–</td>
+    <td>–</td>
+    <td>100%</td>
+    <td>100%</td>
+  </tr>
+  <tr>
+    <td class="heading">Médicaments    vignettes oranges</td>
+    <td>–</td>
+    <td>–</td>
+    <td>–</td>
+    <td>100%</td>
+  </tr>
+  <tr>
+    <td class="heading">Auxiliaires  médicaux <span class="tip" >?</span><span class="service-tooltip-classic">infirmières,    kinésithérapeutes, orthophoniste, etc.</span></td>
+    <td>–</td>
+    <td>–</td>
+    <td>150%</td>
+    <td>200%</td>
+  </tr>
+
+  <tr>
+    <th>DENTAIRE</th>
+    <th>100%</th>
+    <th>100%</th>
+    <th>150%</th>
+    <th>200%</th>
+  </tr>
+  <tr>
+    <td class="heading">Consultations, soins, radiographies</td>
+    <td>100%</td>
+    <td>100%</td>
+    <td>150%</td>
+    <td>200%</td>
+  </tr>
+  <tr>
+    <td class="heading">Prothèses    dentaires et orthodontie</td>
+    <td>–</td>
+    <td>–</td>
+    <td>150%</td>
+    <td>200%</td>
+  </tr>
+  <tr>
+    <th>OPTIQUE</th>
+    <th>–</th>
+    <th>–</th>
+    <th >100% <br />
+      + forfait $</th>
+    <th >100% <br />
+      + forfait $$</th>
+  </tr>
+  <tr>
+    <td class="heading">Monture et verres adultes<br />
+      faible et moyenne correction</td>
+    <td>–</td>
+    <td>–</td>
+    <td >100%<br />
+      +100 €</td>
+    <td >100%<br />
+      +150€</td>
+  </tr>
+  <tr>
+    <td class="heading">Monture et verres adultes<br />
+      forte et progressifs</td>
+    <td>–</td>
+    <td>–</td>
+    <td >100%<br />
+      + 150  €</td>
+    <td >100%<br />
+      + 200 €</td>
+  </tr>
+  <tr>
+    <td class="heading">Monture et verres enfants</td>
+    <td>–</td>
+    <td>–</td>
+    <td >100    %<br />
+      + 50 €</td>
+    <td >100    %<br />
+      + 100 €</td>
+  </tr>
+  <tr>
+    <td class="heading">Lentilles et    produits d'entretien</td>
+    <td>–</td>
+    <td>–</td>
+    <td >100    %<br />
+      + 80 €</td>
+    <td >100    %<br />
+      + 80 €</td>
+  </tr>
+  <tr>
+    <th>AUTRES</th>
+    <th>&nbsp;</th>
+    <th>&nbsp;</th>
+    <th>&nbsp;</th>
+    <th>&nbsp;</th>
+  </tr>
+  <tr>
+    <td class="heading">Appareillage</td>
+    <td>–</td>
+    <td>–</td>
+    <td >100%<br />
+      + 100 €</td>
+    <td >100%<br />
+      + 200 €</td>
+  </tr>
+  <tr>
+    <td class="heading">Contraceptifs <span class="tip" >?</span><span class="service-tooltip-classic">contraceptifs faisant    l'objet d'une prescription médicale et non remboursés par l'Assurance Maladie</span></td>
+    <td>–</td>
+    <td>–</td>
+    <td>40 € /an</td>
+    <td>50 € / an</td>
+  </tr>
+  <tr>
+    <td class="heading">Osthéopathe <span class="tip" >?</span><span class="service-tooltip-classic">sous réserve que le    praticien soit titulaire d'un diplôme reconnu</span> </td>
+    <td>–</td>
+    <td>–</td>
+    <td>40 € / an</td>
+    <td>50 € / an</td>
+  </tr>
+  <tr>
+    <td class="heading">Sevrage    tabagique</td>
+    <td>–</td>
+    <td>–</td>
+    <td>90 € / an</td>
+    <td>100 € / an</td>
+  </tr>
+</table>
+</body>
+</html>
