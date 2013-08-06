@@ -214,6 +214,8 @@ div.tooltip, .service-tooltip-classic {
 #content .selected h3{color:#eee;}
 
 
+.bottom-right .description {padding:0 1em;border-left:1px solid #eee;border-right:1px solid #eee;}
+
 .secu{color:#469949;}
 /* EFFET DE BORD */
 #content .produit_univers_wrapper h2{margin-top:0;color:#fff;}
@@ -229,7 +231,11 @@ div.tooltip, .service-tooltip-classic {
 	line-height: 1.4em;
 	}
 	
-	#content .node #shop-items li{background:none;padding:0;}
+#content .node ul.vert li{background-image:url("/sites/default/files/fleche-verte.jpg");}
+#content .node ul.violet li{background-image:url("sites/default/files/fleche-voil.png");}
+
+
+#content .node #shop-items li{background:none;padding:0;}
 	
 	
 /*	
@@ -278,3 +284,10 @@ body{background:#fff;
 
 
 #content .node .produit_button_subscribe p{text-transform:uppercase;text-align:center;margin:0;}
+
+#footer p,#footer li{font-size:13px;}
+#footer .item .date{font-size:.8em;}
+
+.block-block-news-highlight ,.block-block-one-click,.block-simplenews-footer {padding: 0;  width: 300px;}
+.block-simplenews-footer { padding-top: 33px;}
+.block-block-news-highlight{width:380px;}
