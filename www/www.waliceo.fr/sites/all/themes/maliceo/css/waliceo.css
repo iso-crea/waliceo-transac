@@ -1,7 +1,6 @@
 
 .smaller{font-size:.8em;}
 
-
 .node-type-small-product .content a{font-size:1em !important;}
 
 hr{margin:2em 0 1em}
@@ -14,20 +13,29 @@ dl.produit dd{float:left;width:400px;}
 
 dl.produit dt.prix{
   	float:left;
-  	width:200px; 
   	background:#24ADE1;
 	border-radius: 30px 30px 30px 30px;
+	border-radius: 50px 50px 50px 50px;
     color: #FFFFFF;
     display: inline-block;
     font-size: 1.3em;
-    height: 45px;
-    line-height: 13px;
-    padding-top: 15px;
+    height:90px;
+	width: 90px;
+    line-height: 1.3em;
     position: relative;
     text-align: center;
-  	width: 60px;
   	margin:0 15px;
 }
+
+dl.produit dt.prix span{display:block;}
+dl.produit dt.single span{margin-top:30px;}
+
+dl.produit dt.double span{margin-top:20px;}
+dl.produit dt.double span span{font-size:.6em;line-height:1em;margin:0;}
+
+
+dl.produit dt.triple span{font-size:1em;line-height:1em;display:block;margin-top:20px;}
+dl.produit dt.triple span span{font-size:.6em;line-height:1em;margin:0;}
 
 dl.produit dt.prix3{
   	float:left;
@@ -61,7 +69,7 @@ dl.produit dt.prix1{
   	margin:0 15px;
 }
 
-.smaller{font-size:.8em;}
+
 /*ul{margin:.5em 0;}*/
 ul li{padding:.2em 0;}
 
