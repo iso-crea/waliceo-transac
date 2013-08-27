@@ -29,12 +29,17 @@ dl.produit dt.prix{
 dl.produit dt.prix span{display:block;}
 dl.produit dt.single span{margin-top:30px;}
 
-dl.produit dt.double span{margin-top:20px;}
+dl.produit dt.double span{margin-top:20px;font-size:1.3em;}
 dl.produit dt.double span span{font-size:.6em;line-height:1em;margin:0;}
 
 
-dl.produit dt.triple span{font-size:1em;line-height:1em;display:block;margin-top:20px;}
+dl.produit dt.triple span{font-size:1.3em;line-height:1em;display:block;margin-top:20px;}
 dl.produit dt.triple span span{font-size:.6em;line-height:1em;margin:0;}
+
+
+.product-choice-header {
+    margin: 30px 0 50px;
+}
 
 dl.produit dt.prix3{ /*check for del */
   	float:left;
@@ -73,8 +78,7 @@ dl.produit dt.prix1{/*check for del */
 ul li{padding:.2em 0;}
 
 ul.avantages{margin:1em 2em;}
-ul.avantages li{margin:.5em 0;font-size:13px;}
-
+ul.avantages li{margin:.5em 0;font-size:1.4em;}
 .node-type-small-product .content a{font-size:1em !important;}
 
 hr{margin:2em 0 1em}
@@ -83,6 +87,24 @@ h3{margin:1.5em 0 .5em;}
 .rouge{color:#FA3F39;}
 
 .secu{color:#469949;}
+
+
+/* Affichage des prix */
+.BlocPrix {
+    height: 1%;
+    overflow: hidden;
+}
+.BlocPrix .prix {
+    float: left;
+    font-size: 35px;
+}
+.cents {
+    float: left;
+    font-size: 14px;
+    margin: 0 0 0 2px;
+}
+
+
 
 /* Tableau   */
 table.matrix {
@@ -208,8 +230,8 @@ div.tooltip, .service-tooltip-classic {
 
 
 
-#content .node p{text-align:justify;font-size:13px;line-height: 1.4em;margin:1em 0 1em;}
-#content .node .product_button_subscribe p {text-align:center} /* a virer */
+#content .node p{text-align:justify;/*font-size:1em;*/line-height: 1.4em;margin:1em 0 1em;}
+#content .node .product_button_subscribe p {text-align:center} /* a suppr. */
 #content .node h2{font-weight:bold;font-size:2em;color:#333;margin:30px 0 15px 0;}
 #content .node h3{font-weight:bold;font-size:1.8em;color:#333;margin:30px 0 15px 0;}
 
@@ -217,7 +239,14 @@ div.tooltip, .service-tooltip-classic {
 
 
 #content .node .views-field-title-top h2{font-size:1.8em;padding:0 ; text-align: center;font-weight: 700;margin:0;}
-#content .node .views-field-prod-desc h3{font-size:1.1em;padding:0 ; text-align: justify;font-weight: 400;margin:0;}
+/* #content .node .views-field-prod-desc h3{font-size:1.1em;padding:0 ; text-align: justify;font-weight: 400;margin:0;}*/
+#content .node .views-field-prod-desc h3{padding:0 ; text-align: justify;font-weight: 400;margin:10px 0;
+font-size:1em; !important}
+
+#lightbox .node h2{color:#FB4039;border-bottom: 1px solid #FB4039;font-weight:400;padding-bottom: 4px ;margin-top:10px;}
+
+#lightbox .node h3{color:#333;font-weight:400;background:#f8F8F8;padding-left: 15px;}
+#lightbox #content .node ul{margin:20px 0 0 10px;padding:0 0 0 6px;}
 
 #content .selected h2{font-weight:bold;font-size:2em;color:#dcdcdc;color:#F3D074;margin:30px 0 15px 0;}
 #content .selected h3{color:#eee;}
@@ -236,7 +265,7 @@ div.tooltip, .service-tooltip-classic {
 	list-style-type:none;	
 	padding:0 0 .8em 20px;
 	margin:0;
-	font-size:13px;
+	/* font-size:13px; */
 	line-height: 1.4em;
 	}
 	
