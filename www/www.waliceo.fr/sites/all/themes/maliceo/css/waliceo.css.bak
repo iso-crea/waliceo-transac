@@ -1,0 +1,320 @@
+
+.smaller{font-size:.8em;}
+
+.node-type-small-product .content a{font-size:1em !important;}
+
+hr{margin:2em 0 1em}
+h3{margin:1.5em 0 .5em;}
+
+dl.produit{overflow:hidden;height:1%;margin:20px 0 ;}
+
+dl.produit dd{float:left;width:400px;}
+ 
+dl.produit dt.prix{
+  	float:left;
+  	background:#24ADE1;
+	border-radius: 30px 30px 30px 30px;
+	border-radius: 50px 50px 50px 50px;
+    color: #FFFFFF;
+    display: inline-block;
+    font-size: 1.3em;
+    height:90px;
+	width: 90px;
+    line-height: 1.3em;
+    position: relative;
+    text-align: center;
+  	margin:0 15px;
+}
+
+dl.produit dt.prix span{display:block;}
+dl.produit dt.single span{margin-top:30px;}
+
+dl.produit dt.double span{margin-top:20px;}
+dl.produit dt.double span span{font-size:.6em;line-height:1em;margin:0;}
+
+
+dl.produit dt.triple span{font-size:1em;line-height:1em;display:block;margin-top:20px;}
+dl.produit dt.triple span span{font-size:.6em;line-height:1em;margin:0;}
+
+dl.produit dt.prix3{ /*check for del */
+  	float:left;
+  	background:#24ADE1;
+	border-radius: 50px 50px 50px 50px;
+    color: #FFFFFF;
+    display: inline-block;
+    font-size: 1.3em;
+    height:95px;
+    line-height: 13px;
+    padding-top: 5px;
+    position: relative;
+    text-align: center;
+  	width: 100px;
+  	margin:0 15px;
+}
+
+dl.produit dt.prix1{/*check for del */
+  	float:left;
+  	background:#24ADE1;
+	border-radius: 30px 30px 30px 30px;
+    color: #FFFFFF;
+    display: inline-block;
+    font-size: 1.2em;
+  font-weight:700;
+    height: 60px;
+    line-height: 60px;
+    position: relative;
+    text-align: center;
+  	width: 60px;
+  	margin:0 15px;
+}
+
+
+/*ul{margin:.5em 0;}*/
+ul li{padding:.2em 0;}
+
+ul.avantages{margin:1em 2em;}
+ul.avantages li{margin:.5em 0;}
+
+.node-type-small-product .content a{font-size:1em !important;}
+
+hr{margin:2em 0 1em}
+h3{margin:1.5em 0 .5em;}
+
+.rouge{color:#FA3F39;}
+
+.secu{color:#469949;}
+
+
+/* Affichage des prix */
+.BlocPrix {
+    height: 1%;
+    overflow: hidden;
+}
+.BlocPrix .prix {
+    float: left;
+    font-size: 35px;
+}
+.cents {
+    float: left;
+    font-size: 14px;
+    margin: 0 0 0 2px;
+}
+
+
+
+/* Tableau   */
+table.matrix {
+    border: 0 none;
+    border-spacing: 0;
+    margin: 25px 0;
+    width: 100%;width:650px;
+	font-size:13px;
+}
+table.matrix th, table.matrix td {
+    padding: 14px 10px;
+    text-align: center;
+}
+
+table.matrix th {
+	background-color:#fff;
+    border-top: 0;
+	border-bottom:3px solid #FA3F39;
+	color:#FA3F39;
+    font-weight: bold;
+    padding:10px 0 0px 30px;
+    text-align: left;
+	height:35px;
+}
+
+table.matrix tr.impair td{background:#fafafa;}
+table.matrix td {
+    /*line-height: 115%;*/
+	color:#444;
+	border:0;
+	border-bottom:1px solid #ddd;
+}
+table.matrix td.price {
+    font-size: 120%;
+}
+
+.w350p{width:350px}
+
+table.matrix td.price span, table.matrix td span {
+    font-size: 10px;
+    padding-left: 1px;
+}
+
+table.matrix td.heading {
+    padding-left: 12px;
+    text-align: right;
+	color:#000;
+    width: 350px;
+}
+table.matrix td.entete {
+    padding-left: 12px;
+    text-align: right;
+	color:#000;
+	padding:1em 0;
+}
+
+.w200p{width:200px}
+
+table.matrix td.heading strong {
+    font-size: 12px;
+    font-weight: normal;
+}
+
+table.matrix td.heading span {
+    font-size: 11px;
+    font-weight: normal;
+}
+
+
+
+table.matrix a.service-tooltip{border:none;text-align:left;}
+
+
+table.matrix .service-tooltip span.service-tooltip-classic {display:none;padding: 1em;}
+
+table.matrix  .service-tooltip:hover span.service-tooltip-classic {
+    border-radius: 5px 5px 5px 5px;display:block;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
+    color: #444;
+    font-family: Lato;
+    left: 3em;
+    margin-left: 0;
+    position: absolute;
+    top: 0;
+    width: 200px;
+    z-index: 99;
+}
+
+span.tip {
+    background-color: #666;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+	width:20px;
+	border-radius: 10px;
+	height:20px;
+	line-height:20px;
+	display:inline-block;
+	text-align:center;
+   margin-left: 5px;
+    /* padding: 1px 4px;*/
+    text-decoration: none;
+}
+span.tip:hover {
+    color: #FFFFFF;
+}
+
+/*
+div.tooltip, .service-tooltip-classic {
+	display:none;
+    background: none repeat scroll 0 0 #000000;
+    border: 1px solid #555555;
+    color: #FFFFFF;
+    font-size: 11px;
+    left: -10px;
+    line-height: 135%;
+    padding: 12px 20px;
+    text-align: left;
+    top: 20px;
+    width: 200px;
+    z-index: 100;
+}*/
+
+
+
+#content .node p{text-align:justify;/*font-size:1em;*/line-height: 1.4em;margin:1em 0 1em;}
+#content .node .product_button_subscribe p {text-align:center} /* a suppr. */
+#content .node h2{font-weight:bold;font-size:2em;color:#333;margin:30px 0 15px 0;}
+#content .node h3{font-weight:bold;font-size:1.8em;color:#333;margin:30px 0 15px 0;}
+
+/*.views-field-title-top {height:50px;}*/
+
+
+#content .node .views-field-title-top h2{font-size:1.8em;padding:0 ; text-align: center;font-weight: 700;margin:0;}
+#content .node .views-field-prod-desc h3{font-size:1.1em;padding:0 ; text-align: justify;font-weight: 400;margin:0;}
+
+#content .selected h2{font-weight:bold;font-size:2em;color:#dcdcdc;color:#F3D074;margin:30px 0 15px 0;}
+#content .selected h3{color:#eee;}
+
+
+.bottom-right .description {padding:0 1em;border-left:1px solid #eee;border-right:1px solid #eee;}
+
+.secu{color:#469949;}
+/* EFFET DE BORD */
+#content .produit_univers_wrapper h2{margin-top:0;color:#fff;}
+
+
+#content .node ul{margin:0;padding:0 0 0 6px;}
+#content .node li{
+	background:url("/sites/all/themes/maliceo/images/fleche-rouge.gif") left 6px no-repeat;
+	list-style-type:none;	
+	padding:0 0 .8em 20px;
+	margin:0;
+	/* font-size:13px; */
+	line-height: 1.4em;
+	}
+	
+#content .node ul.vert li{background-image:url("/sites/default/files/fleche-verte.jpg");}
+#content .node ul.violet li{background-image:url("sites/default/files/fleche-voil.png");}
+
+
+#content .node #shop-items li{background:none;padding:0;}
+	
+	
+/*	
+body{background:#fff;
+
+}
+#page {
+    background:#FFFFFF url("http://ns310322.ovh.net/~waliceo/images/bg-body.jpg") right top no-repeat ;
+    margin: 0 auto;
+	width:1500px;
+}
+
+#sidebar-second {
+    margin: 135px 0 0 40px;
+    float:left;
+    width: 340px;
+    z-index: 4;
+	display:inline;
+}
+*/
+		
+	ul.black-arrow li{background-position:left 4px;}
+
+	.megamenu ul.sourds li,.megamenu ul.waliceo li{display:block;}
+	#header ul.black-arrow li {font-size:1em;}
+	
+	ul#menu-main li li {display:block;float:none;}
+	
+	#block-menu-main .megamenu ul.sourds li a {font-weight: bold; font-size: 1em; text-shadow: 1px 1px white;text-transform:uppercase;color:#009bcc;}
+	#block-menu-main .megamenu ul.sourds li li a {font-weight: bold; font-size: 1em; text-shadow: 1px 1px white;text-transform:none;color:#444;}
+	
+	#block-menu-main .megamenu ul.sport li a {font-weight: bold; font-size: 1em; text-shadow: 1px 1px white;text-transform:uppercase;color:#c754c2;}
+	#block-menu-main .megamenu ul.sport li li a {font-weight: bold; font-size: 1em; text-shadow: 1px 1px white;text-transform:none;color:#444;}
+	
+	#block-menu-main .megamenu ul.waliceo li a {font-weight: bold; font-size: 1em; text-shadow: 1px 1px white;text-transform:uppercase;color:#FA3F39;}
+	#block-menu-main .megamenu ul.waliceo li li a {font-weight: bold; font-size: 1em; text-shadow: 1px 1px white;text-transform:none;color:#444;}
+	
+	
+	.megamenu ul.sourds li li{background:url("/sites/default/files/pastilles-bleue.png") left .5em no-repeat;display:block;}
+	.megamenu ul.sport li li{background:url("/sites/default/files/pastilles-voilet.png") left .5em no-repeat;display:block;}
+	.megamenu ul.waliceo li li{background:url("/sites/default/files/pastilles-rouge.png") left .5em no-repeat;display:block;}
+	
+	#block-menu-main .megamenu .coldroite {padding: 0.2em 0 3em;}
+	#block-menu-main .megamenu .coldroite a{color:#444;}
+	#block-menu-main .megamenu .coldroite img{margin:0 6px 0 0;float:left;}
+
+
+#content .node .produit_button_subscribe p{text-transform:uppercase;text-align:center;margin:0;}
+
+#footer p,#footer li{font-size:13px;}
+#footer .item .date{font-size:.8em;}
+
+.block-block-news-highlight ,.block-block-one-click,.block-simplenews-footer {padding: 0;  width: 300px;}
+.block-simplenews-footer { padding-top: 33px;}
+.block-block-news-highlight{width:380px;}

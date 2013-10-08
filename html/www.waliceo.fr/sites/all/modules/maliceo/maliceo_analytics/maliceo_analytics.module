@@ -1,0 +1,78 @@
+<?php
+
+/**
+ * @file
+ * Puts correct data for Google Analytics.
+ *
+ * @package maliceo
+ * @subpackage maliceo_analytics
+ */
+
+/**
+ * Implements hook_preprocess_html().
+ */
+function maliceo_analytics_preprocess_html(&$vars) {
+  if (preg_match('/^\/checkout\/\d+\/complete/', request_uri())) {
+    $data = maliceo_analytics_get_storage_data();
+
+    // Gets transaction_id.
+    $transaction_id = $data['order_id'];
+
+    // Gets universe's title.
+    $universe = $data['universe'];
+
+    // Gets transaction_value.
+    $transaction_value = $data['order_total'];
+
+    // Gets the city.
+    $city = $data['city'];
+
+    // Gets products values.
+    $items = $data['items'];
+
+    $vars['analytics'] = theme('maliceo_analytics_checkout', array(
+      'transaction_id' => $transaction_id,
+      'universe' => $universe,
+      'transaction_value' => $transaction_value,
+      'city' => $city,
+      'items' => $items,
+    ));
+  }
+  else {
+    $vars['analytics'] = '';
+  }
+
+}
+
+/**
+ * Returns maliceo_storage data necessary for analytics.
+ *
+ * @return array
+ *   Array of data.
+ */
+function maliceo_analytics_get_storage_data() {
+  $ret = array();
+
+  $ret['order_id'] = json_decode(maliceo_storage_get('order_id'), TRUE);
+
+  $ret['order_total'] = json_decode(maliceo_storage_get('order_total'), TRUE);
+
+  $ret['universe'] = json_decode(maliceo_storage_get('universe'), TRUE);
+
+  $ret['city'] = json_decode(maliceo_storage_get('city'), TRUE);
+
+  $ret['items'] = json_decode(maliceo_storage_get('order_items'), TRUE);
+
+  return $ret;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function maliceo_analytics_theme() {
+  return array(
+    'maliceo_analytics_checkout' => array(
+      'template' => 'maliceo_analytics_checkout',
+    ),
+  );
+}

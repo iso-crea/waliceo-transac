@@ -1,0 +1,666 @@
+<?php
+
+/**
+ * @file
+ * Handles the subscription form
+ *
+ * @package maliceo
+ * @subpackage maliceo_subscription
+ */
+
+/**
+ * Retrieves current value for a given form field, possibly from cookie value.
+ */
+function maliceo_subscription_get_current_form_value($fieldname, $default_value, $form_state) {
+  $ret_val = $default_value;
+  $storage_field = maliceo_storage_get($fieldname);
+  if (!empty($storage_field)) {
+    $ret_val = json_decode($storage_field, TRUE);
+  }
+  if (!empty($form_state['values'][$fieldname]) && $form_state['values'][$fieldname] != $ret_val) {
+    $ret_val = $form_state['values'][$fieldname];
+  }
+  return $ret_val;
+}
+
+/**
+ * Called both by block and page display.
+ */
+function maliceo_subscription_generate_form($form, &$form_state) {
+
+  $howmany_select = maliceo_subscription_get_current_form_value(
+      'howmany_select', 1, $form_state);
+  $postcode = maliceo_subscription_get_current_form_value('postcode', '',
+      $form_state);
+  $health_checks = maliceo_subscription_get_current_form_value(
+      'health_checks', 0, $form_state);
+  $product_nid = $form_state['values']['product_nid'];
+
+  $email = maliceo_subscription_get_current_form_value('email', '',
+      $form_state);
+
+  $contract_start_date = maliceo_subscription_get_current_form_value(
+      'contract_start_date', date('m'), $form_state);
+
+  $form['#attached']['css'] = array(
+    drupal_get_path('module', 'maliceo_subscription') .
+    '/maliceo_subscription.css',);
+
+  // Replace page title only when on "page" display (not "block").
+  if ($form_state['values']['page_display']) {
+    $form['#attached']['js'] = array(
+      drupal_get_path('module', 'maliceo_subscription') .
+      '/maliceo_subscription.js',
+    );
+  }
+
+  $maliceo_subscription_intro_text = variable_get(
+      'maliceo_subscription_intro_text',
+      'Hello, this text can be set in the admin section');
+  $form['maliceo_subscription_intro_text'] = array(
+    '#prefix' => '<div id="intro-text">',
+    '#suffix' => '</div>',
+    '#markup' => t($maliceo_subscription_intro_text),
+  );
+
+  // Add css to the form element, so that we can style it (even across postbacks).
+  $form['#attributes'] = array('class' => array('subscription-form-class'));
+
+  // This will not be displayed in the form (display:none), but it's value
+  //
+  // will replace the current page title (H1), via jQuery, to get around
+  // cache problem.
+  $maliceo_subscription_intro_title = variable_get(
+      'maliceo_subscription_intro_title',
+      'Hello, this text can be set in the admin section');
+  $form['maliceo_subscription_intro_title'] = array(
+    '#prefix' => '<div id="intro-title">',
+    '#suffix' => '</div>',
+    '#markup' => t($maliceo_subscription_intro_title),
+  );
+
+
+  $form['product_id'] = array(
+    '#type' => 'hidden',
+    '#title' => t('product id '),
+    '#default_value' => $product_nid,
+    '#size' => 6,
+    '#maxlength' => 5,
+  );
+
+  $flag_univers_value = 0;
+  if (strpos(current_path(), variable_get('maliceo_form_extra_url_suffix', '/form')) > 0) {
+    $flag_univers_value = 1;
+  }
+
+  // Will keep track of the suffix, if present.
+  $form['flag_univers'] = array(
+    '#type' => 'hidden',
+    '#title' => t('flag_univers'),
+    '#default_value' => $flag_univers_value,
+    '#size' => 6,
+    '#maxlength' => 5,
+  );
+
+  $form['open_form'] = array(
+    '#markup' => '<div class="subscription-form">',
+  );
+
+  $form['howmany_select'] = array(
+    '#title' => t('How many people to insure ?'),
+    '#type' => 'select',
+    '#options' => array(
+      1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8),
+    '#default_value' => $howmany_select,
+    '#ajax' => array(
+      'callback' => 'maliceo_subscription_how_many_people_callback',
+      'wrapper' => 'date-wrapper-div',
+      'effect' => 'slide',
+    ),
+  );
+
+  $form['date_wrapper'] = array(/* ajax wrapper */
+    '#prefix' => '<div id="date-wrapper-div">',
+    '#suffix' => '</div>',
+    '#type' => 'markup',
+  );
+
+  for ($i = 1; $i <= $howmany_select; $i++) {
+    $current_dob = maliceo_subscription_get_current_form_value("dob_$i",
+        array('year' => 0), $form_state);
+    if ($i == 1) {
+      $form['date_wrapper']["stype_$i"] = array(
+        '#type' => 'select',
+        '#title' => t("birth year @number", array('@number' => $i)),
+        '#options' => array(
+          0 => t('Subscriptor'))
+      );
+    } else {
+      $form['date_wrapper']["stype_$i"] = array(
+        '#type' => 'select',
+        '#title' => t("birth year @number", array('@number' => $i)),
+        '#options' => array(
+          1 => t('Spouse'), 2 => t('Child')),
+        '#default_value' => maliceo_subscription_get_current_form_value("stype_$i",'1', $form_state)
+      );
+    }
+    // You need "Date" module for this.
+    $form['date_wrapper']["dob_$i"] = array(
+      '#type' => 'date_select',
+      '#date_format' => 'Y',
+      '#default_value' => $current_dob,
+      '#title_display' => 'before',
+      '#date_year_range' => '-99', /* business rule */
+      '#required' => TRUE,
+      '#date_label_position' => 'within'
+    );
+  }
+
+  $next_four_months = maliceo_subscription_compute_next_four_months();
+  $form["contract_start_date"] = array(
+    '#type' => 'select',
+    '#title' => t("contract starting date"),
+    '#default_value' => $contract_start_date,
+    '#options' => $next_four_months,
+  );
+
+  $form['postcode'] = array(
+    '#type' => 'textfield',
+    '#title' => t('PostCode'),
+    '#default_value' => $postcode,
+    '#size' => 2,
+    '#maxlength' => 2,
+    '#required' => TRUE,
+  );
+
+  $opts = array(1 => t('yes'), 0 => t('no'));
+  $form['health_checks'] = array(
+    '#type' => 'radios',
+    '#title' => t('Do you use heath checks ?'),
+    '#default_value' => $health_checks,
+    '#options' => $opts,
+  );
+
+  $form['email'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Your email'),
+    '#default_value' => $email,
+    '#size' => 20,
+    '#maxlength' => 180,
+    '#required' => FALSE,
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Get rates for my situation'),
+    '#prefix' => '<div id="subscription-submit-wrapper">',
+    '#suffix' => '</div>',
+  );
+
+  $form['#validate'][] = 'maliceo_subscription_custom_validation';
+  $form['#submit'][] = 'maliceo_subscription_custom_submit';
+
+  $form['close_form'] = array(
+    '#markup' => '</div>',
+  );
+  return $form;
+}
+/**
+ * Validates public form.
+ */
+function maliceo_subscription_custom_validation(&$form, &$form_state) {
+
+  $postcode_validation = maliceo_subscription_validate_postcode($form_state['input']['postcode']);
+  if ($postcode_validation !== 'ok') {
+    form_set_error('postcode', $postcode_validation);
+  }
+  $last_partner = 0;
+  for ($index = 1; $index <= $form_state['input']['howmany_select']; $index++) {
+    if ($form_state['input']["stype_$index"] == 2 && (date('Y') - $form_state['input']["dob_$index"]['year']) > 28) {
+      form_set_error("dob_$index", t('A child can not be more than 28 years old'));
+    }
+    if ($form_state['input']["stype_$index"] == 1) {
+      $count_partner++;
+      $last_partner = $index;
+    }
+  }
+  if ($count_partner > 1) {
+    form_set_error("stype_$index",t('Only one partner is allowed'));
+  }
+}
+
+/**
+ * Checks that postcode is numeric and within range (RGMA-23-4).
+ *
+ * @param int $postcode
+ *   (a two-digit figure)
+ *
+ * @return string
+ *   an error message (else 'ok')
+ */
+function maliceo_subscription_validate_postcode($postcode) {
+  if (is_numeric($postcode) && strlen($postcode) <= 2) {
+    if ($postcode > 0 &&  $postcode <= 98  &&  $postcode != 96 && $postcode != 97) {
+      return 'ok';
+    }
+    else {
+      return t('Sorry, this area is not covered by Maliceo');
+    }
+  }
+  else {
+    return t('postcode must be numeric');
+  }
+}
+
+/**
+ * Handles custom submit for the public form.
+ */
+function maliceo_subscription_custom_submit(&$form, &$form_state) {
+  maliceo_subscription_set("howmany_select", $form_state);
+  maliceo_subscription_set("postcode", $form_state);
+  maliceo_subscription_set("health_checks", $form_state);
+  maliceo_subscription_set("contract_start_date", $form_state);
+  maliceo_subscription_set("product_display_id", $form_state['input']['product_id'], TRUE);
+  if ($form_state['input']['email'] !== 'mon_email@gmail.com') {
+    maliceo_subscription_set("email", $form_state);
+  }
+
+  // Let's deal with dobs.
+  for ($index = 1; $index <= $form_state['input']['howmany_select']; $index++) {
+    maliceo_subscription_set('dob_' . $index, $form_state);
+    maliceo_subscription_set('stype_' . $index, $form_state);
+  }
+
+ // Retrieve univers reference from the current product (hidden field).
+  $current_product = node_load((int) $form_state['input']['product_id']);
+  if(!$current_product) {
+      $current_product = $form_state['values']['product_nid'];
+  }
+  $wrapper = entity_metadata_wrapper('node', $current_product);
+
+  switch ($current_product->type) {
+    case 'product':
+      $univers_ref = $wrapper
+        ->field_policy_reference
+        ->field_univers_ref
+        ->nid
+        ->value();
+      break;
+
+    case 'small_product':
+      $univers_ref = $wrapper
+        ->field_store_reference
+        ->field_univers_ref
+        ->nid
+        ->value();
+      break;
+  }
+
+  maliceo_subscription_record_request($form_state['input']);
+
+  $extra_context_parameter = '';
+  if ($form_state['input']['flag_univers'] === '1') {
+    $extra_context_parameter = variable_get('maliceo_form_extra_url_suffix', '/form');
+  }
+
+  $universe_path_alias = drupal_get_path_alias('node/' . $univers_ref);
+
+  // Redirect to "produits" view page , with the contextual universe filter.
+  if($universe_path_alias == "node/") {
+      $form_state['redirect'] = 'produits/';
+  }
+  else {
+      $form_state['redirect'] = 'produits/' . $universe_path_alias . $extra_context_parameter;
+  }
+}
+
+
+/**
+ *  Store user email in DB, at each submission.
+ */
+function maliceo_subscription_record_request($data) {
+
+  // Fill $dobs array with real values, or provide a default value.
+  $dobs = array();
+  for ($i = 0; $i <= 7; $i++) {
+    $current_dob = 'dob_' . ($i + 1);
+    if (!empty($data[$current_dob])) {
+      $dobs[$i] = $data[$current_dob]['year'];
+    }
+    else {
+      $dobs[$i] = 0;
+    }
+  }
+
+
+  $insert_date = format_date(time(), 'custom', 'Y-m-d H:i:s');
+  $guid =uniqid();
+
+  db_merge('maliceo_subscription')
+  ->key(array('mail' =>  $data['email']))
+  ->fields(array(
+         'postcode' => $data['postcode'],
+         'health_checks' => $data['health_checks'],
+         'contract_start_date' => $data['contract_start_date'],
+         'product' => $data['product_id'],
+         'dob1' => $dobs[0],
+         'dob2' => $dobs[1],
+         'dob3' => $dobs[2],
+         'dob4' => $dobs[3],
+         'dob5' => $dobs[4],
+         'dob6' => $dobs[5],
+         'dob7' => $dobs[6],
+         'dob8' => $dobs[7],
+         'created_at' => $insert_date,
+         'guid' => $guid,
+  ))
+  ->execute();
+
+  maliceo_storage_set("db_id", json_encode($guid));
+}
+
+
+/**
+ * UTILS.
+ */
+function maliceo_subscription_set($field_value, $form_state, $entire = FALSE) {
+  if ($entire) {
+    maliceo_storage_set($field_value, json_encode($form_state));
+  }
+  else {
+    maliceo_storage_set($field_value,
+      json_encode($form_state['input'][$field_value]));
+  }
+}
+
+/**
+ * Javascript callback : refresh date_wrapper, and show its updated content.
+ *
+ * (date fields according to nb of people)
+ */
+function maliceo_subscription_how_many_people_callback($form, $form_state) {
+  return $form['date_wrapper'];
+}
+
+/**
+ * Populate the next four months (business rule).
+ */
+function maliceo_subscription_compute_next_four_months($nb_months = 4) {
+
+  $next_month = date('m') +1;
+  $current_year = date('Y');
+  $record = db_query('select max(year) from formula');
+  $max_year_prix = $record->fetchAssoc();
+  $record = db_query('select max(year) from formula_coeff');
+  $max_year_coeff = $record->fetchAssoc();
+  $max_year = $current_year;
+
+  if (count($max_year_prix) && count($max_year_coeff)) {
+      $max_year = min($max_year_prix['max(year)'], $max_year_coeff['max(year)']);
+  }
+
+  for ($i = $next_month; $i <= ($next_month + $nb_months); $i++) {
+    if ($i > 12) {
+      $month_id = ($i % 13) + 1;
+    }
+    else {
+      $month_id = $i;
+    }
+    if ($i == 13 && $current_year == $max_year) {
+        break;
+    }
+    $next_months[$month_id] = t(date("F", mktime(0, 0, 0, ($month_id + 1), 0, 0)));
+  }
+  return $next_months;
+}
+
+/**
+ * ADMIN SECTION.
+ */
+function maliceo_subscription_admin_settings() {
+
+  $form = array();
+
+  // Description.
+  $description = t('Once done, you need to provide a french <a href="/admin/config/regional/translate/translate">translation</a> for these texts');
+
+  $form['maliceo_subscription_as_csv'] = array(
+    '#type' => 'link',
+    '#title' => t('Get User subscriptions from database as CSV file'),
+    '#href' => 'admin/config/maliceo_subscription/output'
+  );
+
+
+  $form['maliceo_subscription_intro_title'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Form title'),
+    '#default_value' => t(variable_get('maliceo_subscription_intro_title',
+        'Subscribe to this policy')),
+    '#size' => 30,
+    '#maxlength' => 30,
+    '#description' => $description,
+    '#required' => TRUE
+  );
+
+  $form['maliceo_subscription_intro_text'] = array(
+    '#title' => t('Introduction text'),
+    '#type' => 'textarea',
+    '#default_value' => variable_get('maliceo_subscription_intro_text',
+      'Hello, this text can be set in the admin section'),
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('update'),
+  );
+
+  return $form;
+}
+
+/**
+ * Handles form submit when in back-office.
+ */
+function maliceo_subscription_admin_settings_submit($form, &$form_state) {
+  // Intro title.
+  $maliceo_subscription_intro_title
+    = $form_state['input']['maliceo_subscription_intro_title'];
+  $variable_set = variable_set('maliceo_subscription_intro_title',
+    $maliceo_subscription_intro_title);
+
+  // Intro text.
+  $maliceo_subscription_intro_text
+    = $form_state['input']['maliceo_subscription_intro_text'];
+  variable_set('maliceo_subscription_intro_text',
+    $maliceo_subscription_intro_text);
+
+  drupal_set_message(t('You changes were saved'));
+}
+
+/**
+ * Implements hook_permission().
+ */
+function maliceo_subscription_permission() {
+  return array(
+    'administer maliceo subscription form settings' => array(
+      'title' => t('Administer maliceo subscription form settings'),
+    ),
+  );
+}
+
+/** ### PAGE ### * */
+
+/**
+ * Implements hook_menu().
+ */
+function maliceo_subscription_menu() {
+
+  // Will display subscription form to the end-user.
+  $items['souscrire/%'] = array(
+    // This will be replaced dynamically on page display.
+    'title' => 'Souscrire',
+    'description' => 'Allows users to subscribe',
+    'access arguments' => array('access content'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('maliceo_subscription_standalone_form'),
+    'type' => MENU_CALLBACK,
+  );
+
+  // To configure title and intro text of the page above, from back-office.
+  $items['admin/config/maliceo_subscription'] = array(
+    'title' => 'Maliceo subscription form settings',
+    'description' => 'Administer subscription form settings',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('maliceo_subscription_admin_settings'),
+    'access arguments' => array('administer maliceo subscription form settings'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  // Allow admins to get the content of the maliceo_subscription table as CSV.
+  $items['admin/config/maliceo_subscription/output'] = array(
+    'title' => 'user subscriptions as CSV',
+    'description' => 'Return previous user subscription as csv',
+    'page callback' => 'maliceo_subscription_query_output_as_csv',
+    'access arguments' => array('administer maliceo subscription form settings'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+}
+
+/**
+ * Returns the content of the maliceo_subscription table as a CSV file.
+ */
+function maliceo_subscription_query_output_as_csv() {
+
+  $filename = 'results.csv';
+  drupal_add_http_header('Content-Type', 'text/csv; utf-8');
+  drupal_add_http_header('Content-Disposition: attachment; filename=' . $filename);
+
+  $fields = array('mail','phone','postcode','health_checks','contract_start_date','product','dob1',
+    'dob2','dob3','dob4','dob5','dob6','dob7','dob8','created_at','guid');
+
+  $query = db_select('maliceo_subscription', 'p')
+    ->fields('p', $fields);
+  $result = $query->execute();
+
+  // Print header.
+  print implode(',', $fields) . "\r\n";
+
+
+
+  // Print each row.
+  foreach ($result as $record) {
+    // Provide a more meaningful field for product (not only the ID, but also its title).
+    $product_node = node_load($record->product);
+
+    print $record->mail . ',' . $record->phone . ',' . $record->postcode . ',' . $record->health_checks . ','
+     . $record->contract_start_date . ',' . $product_node->title
+     . ' (' . $record->product . ') ' . ',' . $record->dob1 . ',' . $record->dob2 . ','
+     . $record->dob3 . ',' . $record->dob4 . ',' . $record->dob5 . ','
+     . $record->dob6 . ',' . $record->dob7 . ',' . $record->dob8 . ','
+     . $record->created_at . ',' . $record->gui .  "\r\n";
+  }
+}
+
+/**
+ * Called by hook_menu.
+ *
+ * will display the form as a standalone page
+ */
+function maliceo_subscription_standalone_form($form, &$form_state) {
+  // Passes along product_id to sub function based on url argument.
+  $form_state['values']['product_nid'] = arg(1);
+  $form_state['values']['page_display'] = TRUE;
+
+  return maliceo_subscription_generate_form($form, $form_state);
+}
+
+/** ### BLOCK ### * */
+
+/**
+ * Implements hook_block_info().
+ */
+function maliceo_subscription_block_info() {
+  $blocks['maliceo_subscribe'] = array(
+    'info' => t('Maliceo Subscription Block'),
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ *
+ * used in node--landing-page.tpl.php
+ */
+function maliceo_subscription_block_view($delta = 'maliceo_subscribe') {
+  $block = '';
+  if ($delta == 'maliceo_subscribe') {
+    $maliceo_subscribe_form
+      = drupal_get_form(
+        'maliceo_subscription_the_subscription_in_landing_page_form');
+    $block = array(
+      'subject' => t('Maliceo Subscribe'),
+      'content' => render($maliceo_subscribe_form)
+    );
+  }
+  return $block;
+}
+
+/**
+ * Called by hook_block_view to display the form as a BLOCK, within a "landing page".
+ *
+ * From the current landing page, get the product_ref_id, and pass it
+ * to the generate_form function
+ */
+function maliceo_subscription_the_subscription_in_landing_page_form($form, &$form_state) {
+  $landing_page_nid = arg(1);
+  $current_product = node_load($landing_page_nid);
+  $product_ref_id = smile_field_get_value($current_product,
+      'field_product_ref', 'nid');
+  $form_state['values']['product_nid'] = $product_ref_id;
+  $form_state['values']['page_display'] = FALSE;
+  return maliceo_subscription_generate_form($form, $form_state);
+}
+
+/**
+ * Implements hook_preprocess_page().
+ *
+ * Provides a dynamic page title for "souscrire" form  based on product id.
+ */
+function maliceo_subscription_preprocess_page(&$vars, $hook) {
+  // Make sure we have at least two args and the second one is numeric.
+  if (count(arg() >= 2)  && arg(0) === 'souscrire' &&  is_numeric(arg(1))) {
+
+    $current_node = node_load(arg(1));
+    // Check loaded node is of type "product".
+    if (isset($current_node) && $current_node->type == 'product') {
+      $vars['title'] = t('Subscribe to @garantie_title', array('@garantie_title' => $current_node->title));
+
+    }
+
+    // We want the form to appear within a universe context (last url parameter).
+    // Url pattern : /souscrire/xx/form, where xx is the product node id.
+    $form_extra_url_suffix = variable_get('maliceo_form_extra_url_suffix','/form');
+    // Remove leading "/".
+    $form_extra_url_suffix = substr($form_extra_url_suffix,1);
+
+    if (count(arg() == 3)  && (arg(2) == $form_extra_url_suffix)) {
+      // Change current page theme to "universe" and load extra css.
+      $vars['theme_hook_suggestions'][] = 'page__univers';
+      $vars['classes_array'][] = 'page-actu-univers-context';
+      // Pass along contextual universe from the loaded product node.
+      $wrapper = entity_metadata_wrapper('node', $current_node);
+      $vars['current_product'] = $wrapper;
+
+      // Override default title (subscribe to ...) with universe's name.
+      // When the form is displayed within a univers' context.
+      $vars['title'] = t('<span class="smaller"></span> @name', array(
+        '@name' => $wrapper->field_policy_reference->field_univers_ref->title->value(),
+      ));
+
+      //$vars['subtitle'] = 'my subtitle';
+
+    }
+
+  }
+}
